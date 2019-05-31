@@ -1,0 +1,121 @@
+<div class="container p-3">
+  <div class="pb-2 mt-4 mb-4 border-bottom">
+    Daily Effort Capture
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form" (submit)="submit()">
+        <div class="card">
+          <div class="card-header">Daily Effort Capture</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="form-group col-4">
+                <label>PSID</label>
+                <input class="form-control" formControlName="psid" type="text" (change)="onChangePSID(form.value.psid)">
+              </div>
+              <div class="form-group col-4">
+                <label>Application</label>
+                <select (change)="onChangeApplication()" class="form-control" formControlName="application" [(ngModel)]="selectedApplication">
+                      <option *ngFor="let application of applicationList" [ngValue]="application.id">{{application.name}}</option>
+                    </select>
+              </div>
+              <div class="form-group col-3">
+                <label>Date</label>
+                <input class="form-control" formControlName="date" type="date">
+              </div>
+              <div class="form-group col-1">
+                <label style="visibility: hidden;">search</label>
+                <button class="btn btn-secondary" type="button" (click)="searchActivities()"><fa-icon [icon]="faSearch"></fa-icon></button>
+              </div>
+            </div>
+          </div>
+          <div class="card-header">Activiry List</div>
+          <div class="card-body" formArrayName="activities">
+            <div class="row">
+              <div class="col-4">
+                <label>Activities</label>
+              </div>
+              <div class="col-4">
+                <label>Description</label>
+              </div>
+              <div class="col-4">
+                <label>Time</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12" *ngFor="let contact of activityFormGroup.controls; let i = index;" [hidden]="isSearch">
+                <div [formGroupName]="i" class="row">
+                  <div class="form-group col-4">
+                    <select (change)="onChangeActivities(i)" class="form-control" formControlName="activity">
+                      <option *ngFor="let activity of acivityList" [ngValue]="activity.id">{{activity.name}}</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-4">
+                    <input class="form-control" formControlName="desc" type="text" />
+                  </div>
+
+                  <div class="form-group col-2">
+                    <select (change)="onChangeTime(i)" class="form-control" formControlName="time">
+                      <option *ngFor="let time of timeList" [ngValue]="time">{{time}}</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-2">
+                    <button class="btn btn-success m-1" type="button" (click)="addActivities()"><fa-icon [icon]="faPlus"></fa-icon></button>
+                    <button class="btn btn-info m-1" type="button" (click)="submit(i)"><fa-icon [icon]="faSave"></fa-icon></button>
+                    <button class="btn btn-danger m-1" type="button" (click)="removeActivity(i)" [hidden]="i==0"> <fa-icon [icon]="faTrashAlt"></fa-icon></button>
+                  </div>
+                  
+                </div>
+              </div>
+
+
+              <!--UPDATA FORM-->
+
+              <div class="col-12" *ngFor="let act of activitiesList; let i = index;" [hidden]="!isSearch" >
+                <!--{{act|json}}-->
+
+                <div [formGroupName]="0" class="row">
+                  <div class="form-group col-4">
+                    <select (change)="onChangeActivities(i)" class="form-control" formControlName="activity" [(ngModel)]="act.activity.id">
+                      <option *ngFor="let acct of acivityList" [ngValue]="acct.id">{{acct.name}}</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-4">
+                    <input class="form-control" formControlName="desc" type="text" [value]="act.activityDesc" />
+                  </div>
+                  
+                  <div class="form-group col-2">
+                    <select (change)="onChangeTime(i)" class="form-control" formControlName="time" [(ngModel)]="selectedTime[i]">
+                      <option *ngFor="let time of timeList" [value]="time">{{time}}</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-2">
+                    <button class="btn btn-success m-1" type="button" (click)="addActivities()" [hidden]="isSearch"><fa-icon [icon]="faPlus"></fa-icon></button>
+                    <button class="btn btn-info m-1" type="button" (click)="submit(i)"><fa-icon [icon]="faSave"></fa-icon></button>
+                    <button class="btn btn-danger m-1" type="button" (click)="removeActivity(i)" [hidden]="i==0 || isSearch"> <fa-icon [icon]="faTrashAlt"></fa-icon></button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!--<div class="card-body">
+            <div class="col-12 text-right">
+              <button class="btn btn-info m-1" type="submit"> Save </button>
+              <button class="btn btn-success m-1" type="button" (click)="addActivities()"> Add New </button>
+              <button class="btn btn-primary m-1" type="button" (click)="editActivity()"> Edit </button>
+              <button class="btn btn-warning m-1" type="button"> Clear </button>
+            </div>
+          </div>-->
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
